@@ -1,84 +1,56 @@
-# 热词
+# 热词 Mac（HotLyricMac）
 
-> macOS 原生实验移植版位于 [`HotLyricMac`](HotLyricMac/README.md)。
+这是 [cnbluefire/HotLyric](https://github.com/cnbluefire/HotLyric) 的原生 macOS 实验移植版。Windows 原版依赖 WinUI 3、SMTC 和 Win32 API，因此 Mac 版使用 Swift、SwiftUI 和 AppKit 重写系统集成层。
 
-为其他播放器提供桌面歌词。
+## 当前功能
 
-下载地址: [https://www.microsoft.com/store/productId/9MXFFHVQVBV9](https://www.microsoft.com/store/productId/9MXFFHVQVBV9)
+- 自动读取 Apple Music 与 Spotify 当前曲目、播放状态和进度
+- 与原版一致，按配置优先使用网易云、失败后回退 QQ 音乐
+- 基于歌名/歌手相似度匹配，以版本化单文件原子缓存歌词、翻译和真实匹配信息
+- 缓存按最近访问时间维护：默认保留 90 天，最多 2,000 首或 100 MB，并在设置页显示占用与提供手动清理
+- 纯音乐标记过滤，以及“翻译优先/下一行/隐藏”第二行策略
+- 始终置顶、跨桌面与全屏空间显示的透明歌词窗口
+- 原版八组主题、逐行卡拉 OK 进度、字号和时间偏移设置
+- 自定义原文、高亮、描边、背景和边框颜色
+- 使用任意已安装字体，并选择常规到粗体四档字重
+- 使用 Core Animation 图层遮罩推进歌词进度；优先使用网易云 YRC 逐字时间轴，并兼容解析 QRC，普通 LRC 自动回退逐行动画
+- 歌词窗口拖动、锁定和鼠标穿透
+- 当前播放器会话粘性选择；暂停后不会跳回优先播放器
+- 自动或手动锁定 Apple Music/Spotify，并显示自动化权限错误
+- Spotify/Apple Music 时间单位归一化，seek、暂停和恢复时重建动画时钟
+- 歌词窗口高度与字号双向联动，窗口宽度独立控制可用行宽
+- 网易云与 QQ 音乐手动搜索、选择结果并缓存歌曲映射
+- 为当前歌曲导入本地 LRC，并保留歌词真实来源
+- 超长歌词保持字号并随播放进度横向滚动
+- 使用 SMAppService 管理登录时启动
+- 显示器拔插、分辨率变化和睡眠唤醒时自动修复窗口位置
+- 播放、暂停、无播放器及低电量模式下自适应调整轮询频率；当前播放器高频刷新，另一个播放器每 5 秒低频探测
+- Carbon 系统级快捷键：播放控制、锁定及歌词窗口显隐
+- 菜单栏手动显隐歌词，或在无播放器时自动隐藏
+- 无有效歌词行时显示歌名、歌手、专辑、播放器和加载状态
+- 设置页将当前歌曲统一显示为“歌名 - 歌手”，歌词来源按“匹配歌名 / 匹配歌手 · 平台”展示
+- 菜单栏展示播放进度、播放状态及歌词来源
+- 菜单栏播放/暂停、上一首、下一首、重新匹配和解锁
+- Apple Silicon 与 Intel 通用构建；最低支持 macOS 13
 
-交流与反馈: [QQ群 1145646224](https://jq.qq.com/?_wv=1027&k=K4Ixe2Gw)
+## 构建
 
-v1.3.0 后从 wpf 移植到 winui3 框架。由于winui3框架还远远谈不上稳定，新版本的问题相比旧版本会更多，如果遇到问题麻烦及时反馈。
+需要 Xcode Command Line Tools 和 Swift 6：
 
-## 软件截图
-![app](assets/app.png)
+```bash
+git clone https://github.com/Green-hats/HotLyricMac.git
+cd HotLyricMac
+swift test
+./scripts/build-app.sh
+open dist/HotLyric.app
+```
 
-## 支持的播放器   
-|播放器|支持程度|
-|---|---|
-|HyPlayer|完全支持
-|LyricEase|完全支持
-|[Spotify](https://www.spotify.com/)|歌词可能匹配不准确<sup><a href="#ref1">1</a></sup>
-|[网易云音乐 UWP](https://github.com/JasonWei512/NetEase-Cloud-Music-UWP-Repack)<sup><a href="#ref2">2</a></sup>|歌词可能匹配不准确<sup><a href="#ref1">1</a></sup> 无法获取进度<sup><a href="#ref3">3</a></sup>
-|[QQ音乐 UWP](https://www.microsoft.com/store/productId/9WZDNCRFJ1Q1)|歌词可能匹配不准确<sup><a href="#ref1">1</a></sup> 无法获取进度<sup><a href="#ref3">3</a></sup> 无法获取歌曲信息<sup><a href="#ref4">4</a></sup>
-|[媒体播放器（Groove 音乐）](https://www.microsoft.com/store/productId/9WZDNCRFJ3PT)|歌词可能匹配不准确<sup><a href="#ref1">1</a>
-|[Foobar2000 (v1.5.1+)](https://www.foobar2000.org/)|歌词可能匹配不准确<sup><a href="#ref1">1</a></sup> 无法获取进度<sup><a href="#ref3">3</a></sup>
-|[YesPlayerMusic](https://github.com/qier222/YesPlayMusic)|完全支持（请使用最新版）
-|[Apple Music Preview](https://www.microsoft.com/store/productId/9PFHDD62MXS1)|歌词可能匹配不准确<sup><a href="#ref1">1</a></sup>
----
+首次读取播放器时，macOS 会请求“自动化”权限，请允许热词控制 Music 或 Spotify。若误拒绝，可在“系统设置 → 隐私与安全性 → 自动化”中重新启用。
 
-1. <span id="ref1">由于热词对这些播放器的歌词匹配基于歌名歌手搜索，所以匹配可能不精准或匹配不到。</span>
-2. <span id="ref2">请使用 [UWP 不更新版](https://github.com/JasonWei512/NetEase-Cloud-Music-UWP-Repack)，微软商店最新版为 Win32 版，非 UWP 版。</span>
-3. <span id="ref3">由于播放器未提供进度信息，热词使用内置定时器更新歌词进度，所以当手动修改播放进度后热词将无法匹配到正确的歌词。</span>
-4. <span id="ref4">可能无法获取到QQ音乐UWP的播放信息，先开启QQ音乐UWP再启动热词可以缓解。</span>
+## 已知限制
 
-## 已知问题
-* 移除了倍速播放的支持。
-* 出现全屏窗口时自动隐藏的功能还在开发中，暂时隐藏设置中的选项。
-* Windows 10 中先开启热词再开启播放器，热词可能无法正常显示，调查中。
-* Windows 10 中关闭所有播放器时热词可能不会自动隐藏。
+- HyPlayer、LyricEase 和 Windows SMTC 播放器没有 macOS 版本或等价接口，因此未移植。
+- 当前安装包为本地 ad-hoc 签名，尚未使用 Apple Developer ID 公证；分发前需用开发者证书重新签名并 notarize。
+- 歌词匹配依赖网易云音乐、QQ 音乐接口和网络可用性。
 
-## 如何打开
-
-### HyPlayer
-安装热词后，在主界面中点击桌面歌词按钮。
-
-![hyplayer](assets/hyplayer.png)
-
-### LyricEase
-安装热词后，在设置中启用桌面歌词选项。  
-
-![lyricease](assets/lyricease.png)
-
-### Spotify
-Spotify 需要在设置中开启 **在使用媒体键时显示桌面重叠**
-![spotify](assets/spotify.png)
-
-## 使用说明
-
-### 锁定歌词
-
-选中后歌词界面将无法点击和拖拽。在 **通知区域图标上右键** 或 **设置界面中** 或 **双击通知区域图标** 即可解除锁定。
-
-### 性能设置
-
-如果感觉热词占用资源过多，可以打开 **低功耗模式** 以降低资源占用。
-
-**低功耗模式** 设置为 **自动** 时，移动设备在未充电状态，如果系统中开启了 *节电模式* 或 *能效优先* ，则会自动开启低功耗模式。
-
-如果歌词界面渲染错误，请加交流群，或提交Issues，或在设置界面中点击 **反馈问题** 按钮联系我。
-
-### 歌词样式
-
-如果不喜欢预设的歌词样式，可以在右侧切换到自定义模式，调整界面上的每种颜色。
-![custom-theme](assets/custom-theme.png)
-
-### 开机启动
-当在任务管理器中 **启用** 了热词的开机启动项时，应用内的开机启动选项才能设置。
-
-### 重置窗口位置
-如果窗口被拖动到显示器区域外，可以使用此选项恢复窗口的默认位置。
-![reset-window-location](assets/reset-window-location.png)
-
-## 第三方通知
-[第三方通知](HotLyric/HotLyric.Package/ThirdPartyNotices.txt)
+原项目与本移植代码均遵循仓库根目录的 MIT License。

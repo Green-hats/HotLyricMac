@@ -1,8 +1,0 @@
-﻿<Project>
-	<PropertyGroup>
-		<Microsoft_WindowsAppSDK_Version>1.6.250228001</Microsoft_WindowsAppSDK_Version>
-		<Microsoft_Windows_SDK_BuildTools_Version>10.0.22621.3233</Microsoft_Windows_SDK_BuildTools_Version>
-		<DirectNCore_Version>1.17.2</DirectNCore_Version>
-		<BlueFire_Toolkit_WinUI3_Version>0.0.5-alpha.8</BlueFire_Toolkit_WinUI3_Version>
-	</PropertyGroup>
-</Project>

@@ -4,7 +4,7 @@ set -euo pipefail
 ROOT="${0:A:h:h}"
 OUTPUT="${1:-$ROOT/dist}"
 APP="$OUTPUT/HotLyric.app"
-ICON_SOURCE="$ROOT/../HotLyric/HotLyric.Win32/Assets/HotLyricIcon.png"
+ICON_SOURCE="$ROOT/Sources/HotLyricMac/Resources/AppIcon.png"
 
 cd "$ROOT"
 swift build -c release --product HotLyricMac
