@@ -2,7 +2,7 @@
 
 这是 [cnbluefire/HotLyric](https://github.com/cnbluefire/HotLyric) 的原生 macOS 实验移植版。Windows 原版依赖 WinUI 3、SMTC 和 Win32 API，因此 Mac 版使用 Swift、SwiftUI 和 AppKit 重写系统集成层。
 
-> 本项目由作者主导设计与维护，部分代码实现、测试和文档整理使用 [OpenAI Codex](https://openai.com/codex/) 辅助完成。
+> 本项目使用 [OpenAI Codex](https://openai.com/codex/) 辅助完成。
 
 ## 当前功能
 
