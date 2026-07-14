@@ -328,3 +328,11 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
+
+# macOS Finder metadata
+.DS_Store
+
+# HotLyricMac generated files
+HotLyricMac/.build/
+HotLyricMac/.build-x86/
+HotLyricMac/dist/

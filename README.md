@@ -1,5 +1,7 @@
 # 热词
 
+> macOS 原生实验移植版位于 [`HotLyricMac`](HotLyricMac/README.md)。
+
 为其他播放器提供桌面歌词。
 
 下载地址: [https://www.microsoft.com/store/productId/9MXFFHVQVBV9](https://www.microsoft.com/store/productId/9MXFFHVQVBV9)

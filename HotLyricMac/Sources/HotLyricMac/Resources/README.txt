@@ -1,0 +1,1 @@
+HotLyricMac resources

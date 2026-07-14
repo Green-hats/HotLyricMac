@@ -1,0 +1,24 @@
+{
+  "mediaSessionApps": [
+    {
+      "appId": "apple_music",
+      "sessionType": "AppleScript",
+      "match": { "bundleIdentifier": "com.apple.Music" },
+      "options": {
+        "positionMode": "fromApp",
+        "defaultLrcProvider": "NetEase",
+        "mediaPropertiesMode": "AppleMusic"
+      }
+    },
+    {
+      "appId": "spotify",
+      "sessionType": "AppleScript",
+      "match": { "bundleIdentifier": "com.spotify.client" },
+      "options": {
+        "positionMode": "fromApp",
+        "defaultLrcProvider": "NetEase",
+        "mediaPropertiesMode": "Default"
+      }
+    }
+  ]
+}
